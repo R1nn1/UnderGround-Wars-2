@@ -1,0 +1,88 @@
+local DrRayLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+
+local window = DrRayLibrary:Load("Rinns Hub", "Default")
+
+local mainTab = DrRayLibrary.newTab("Main Tab", "ImageIdHere")
+
+local killAuraEnabled = false
+
+-- Function to find the closest living enemy in a 40 stud radius
+local function findClosestEnemy()
+    local players = game:GetService("Players"):GetPlayers()
+    local localPlayer = game:GetService("Players").LocalPlayer
+    local localTeam = localPlayer.Team
+    local closestEnemy = nil
+    local shortestDistance = 40 -- 40 studs radius
+
+    for _, player in ipairs(players) do
+        if player.Team ~= localTeam and player.Team and player.Team.Name ~= "Neutral" and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
+            local distance = (localPlayer.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+            if distance < shortestDistance then
+                closestEnemy = player
+                shortestDistance = distance
+            end
+        end
+    end
+
+    return closestEnemy
+end
+
+-- Function to handle Kill Aura
+local function killAura()
+    print("Kill Aura function started")
+    local localPlayer = game:GetService("Players").LocalPlayer
+
+    while killAuraEnabled do
+        local closestEnemy = findClosestEnemy()
+        if closestEnemy and closestEnemy.Character and closestEnemy.Character:FindFirstChild("HumanoidRootPart") then
+            local humanoid = closestEnemy.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health > 0 then
+                local targetPosition = closestEnemy.Character.HumanoidRootPart.Position
+                local behindPosition = targetPosition - closestEnemy.Character.HumanoidRootPart.CFrame.LookVector * 2
+                localPlayer.Character:SetPrimaryPartCFrame(CFrame.new(behindPosition))
+                print("Teleporting behind " .. closestEnemy.Name)
+            end
+        end
+        wait(0.1) -- Constantly teleporting every 0.1 seconds
+    end
+    print("Kill Aura function ended")
+end
+
+mainTab.newToggle("Kill Aura", "Teleports you behind an enemy, have your sword out", true, function(toggleState)
+    killAuraEnabled = toggleState
+    if toggleState then
+        print("Kill Aura On")
+        coroutine.wrap(killAura)()
+    else
+        print("Kill Aura Off")
+    end
+end)
+
+mainTab.newButton("Auto Dig", "Digs for you, have your shovel out", function()
+    print('Auto Dig On Rinn Hub so cool!!')
+    local function getNil(name, class)
+        for _, v in next, getnilinstances() do
+            if v.ClassName == class and v.Name == name then
+                return v
+            end
+        end
+    end
+
+    local args = {
+        [1] = getNil("114", "Model"),
+        [2] = getNil("DigTrigger", "Part")
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("Dig"):FireServer(unpack(args))
+end)
+local tab = DrRayLibrary.newTab("Misc Tab", "ImageIdHere")
+
+tab.newButton("Teleport to Red Base", "Teleports you to the stairs that lead to Reds Base", function()
+    print('Auto Dig On Rinn Hub so cool!!')
+end)
+
+tab.newButton("Teleport to Blue Base", "Teleports you to the stairs that lead to Blues Base", function()
+    print('Auto Dig On Rinn Hub so cool!!')
+end)
+
+print("Script loaded successfully")
