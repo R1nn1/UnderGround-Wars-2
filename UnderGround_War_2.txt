@@ -85,4 +85,24 @@ tab.newButton("Teleport to Blue Base", "Teleports you to the stairs that lead to
     print('Auto Dig On Rinn Hub so cool!!')
 end)
 
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+    {Title = "Thank You for Using Rinns Hub ", Description = "Join The Discord server to report any bugs or give suggestions https://discord.com/invite/x55Rw6PD7x"},
+    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 8, Type = "option"},
+    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) print(tostring(State)) end}
+)
+
+Notification:Notify(
+    {Title = "IMPORTANT", Description = "If any of the toggles are already green you have to turn it off by clicking it and turning it back on by clicking it again for the feature to work"},
+    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 8, Type = "option"},
+    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) print(tostring(State)) end}
+)
+
+
+
+
+
+
 print("Script loaded successfully")
